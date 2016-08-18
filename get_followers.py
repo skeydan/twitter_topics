@@ -13,9 +13,10 @@ auth = OAuthHandler(config.consumer_key, config.consumer_secret)
 auth.set_access_token(config.access_token, config.access_secret)
 api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True, compression=True)
 
-c = tweepy.Cursor(api.followers_ids, id = 'Trivadis')
+c = tweepy.Cursor(api.followers_ids, id = config.target_user)
 ids = []
-with io.open('follower_ids.csv', 'w', encoding='utf-8') as ids_file: 
+filename = 'data/follower_ids_' + config.target_user + '.csv'
+with io.open(filename, 'w', encoding='utf-8') as ids_file: 
     for page in c.pages():
         ids.extend(page)
     ids.sort()
@@ -24,13 +25,15 @@ with io.open('follower_ids.csv', 'w', encoding='utf-8') as ids_file:
 print "len(ids)=", len(ids)
 
 users = []
-with io.open('followers.csv', 'a', encoding='utf-8') as users_file:
+filename = 'data/followers_' + config.target_user + '.csv'
+with io.open(filename, 'a', encoding='utf-8') as users_file:
     for i, user_id in enumerate(ids):
         try:
             user = api.get_user(user_id)
             users.append(user)
-            users_file.write(u'{},"{}","{}","{}","{}","{}","{}","{}",{}\n'.
-                             format(user.id, user.screen_name, user.name, user.lang, user.location, user.created_at, user.followers_ids(), map(lambda user: user.id, user.friends()), user.statuses_count))  
+            users_file.write(
+                u'{},"{}","{}","{}","{}","{}","{}","{}","{}","{}","{}",{}\n'.
+                format(user.id, user.screen_name, user.name, user.entities, user.url, user.description, user.lang, user.location, user.created_at, user.followers_ids(), map(lambda user: user.id, user.friends()), user.statuses_count))  
             print i, user_id, len(users)
         except TweepError as e:
             if 'Failed to send request:' in e.reason:
