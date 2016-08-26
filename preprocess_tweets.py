@@ -6,15 +6,19 @@ import glob
 import fileinput
 from nltk.tokenize import TweetTokenizer
 
-alltweets_file = 'data/all_' + config.target_user + '_follower_tweets.csv'
 
+alltweets_file = 'data/all_' + config.target_user + '_follower_tweets.csv'
+tokenized_file = 'data/tweets_tokenized.csv'
+english_file = 'data/tweets_english.csv'
+
+'''
 user_files = glob.glob('data/Trivadis_*_*.csv')
 with open(alltweets_file, 'w') as fout:
     f = fileinput.input(files=(user_files))
     for line in f:
         fout.write(line)
     f.close()
-        
+'''
 
 alltweets = pd.read_csv(alltweets_file, header=None, index_col=False,
                     names=['id_str', 'user_id', 'created_at', 'lang', 'text', 'favorite_count', 'entities',
@@ -22,11 +26,21 @@ alltweets = pd.read_csv(alltweets_file, header=None, index_col=False,
                            'retweet_count', 'quoted_status_id_str'],
                     encoding='utf-8', quoting=0)
 
+                  
+print len(alltweets)                    
+
 tokenizer = TweetTokenizer()
 #alltweets['text_tokenized'] = alltweets['text'].apply(lambda t: tokenizer.tokenize(str(t.encode('utf-8').decode('utf-8'))))
-
-
 alltweets['text_tokenized'] = alltweets['text'].apply(lambda t: tokenizer.tokenize(t))
+
+alltweets.to_csv(tokenized_file,encoding='utf-8')
+
+english_tweets = alltweets[alltweets['lang'] == 'en']
+english_tweets.to_csv(english_file, encoding = 'utf-8')
+
+
+
+
 
 
 #http://stackoverflow.com/questions/11339955/python-string-encode-decode
