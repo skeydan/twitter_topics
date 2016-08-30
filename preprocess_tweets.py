@@ -7,8 +7,9 @@ import fileinput
 from nltk.tokenize import TweetTokenizer
 
 
-alltweets_file = 'data/all_' + config.target_user + '_follower_tweets.csv'
-tokenized_file = 'data/tweets_tokenized.csv'
+alltweets_file = config.data_dir + '/all_' + config.target_user + '_follower_tweets.csv'
+tokenized_file = config.data_dir + '/tweets_tokenized.csv'
+tokenized_and_preprocessed_file = config.data_dir + '/tweets_tokenized_and_preprocessed.csv'
 english_file = 'data/tweets_english.csv'
 
 '''
@@ -27,26 +28,27 @@ alltweets = pd.read_csv(alltweets_file, header=None, index_col=False,
                     encoding='utf-8', quoting=0)
 
                   
-print len(alltweets)                    
+print(len(alltweets))                    
 
+# tokenize
 tokenizer = TweetTokenizer()
 #alltweets['text_tokenized'] = alltweets['text'].apply(lambda t: tokenizer.tokenize(str(t.encode('utf-8').decode('utf-8'))))
-alltweets['text_tokenized'] = alltweets['text'].apply(lambda t: tokenizer.tokenize(t))
+alltweets_tokenized = alltweets
+alltweets_tokenized['text_tokenized'] = alltweets_tokenized['text'].apply(lambda t: tokenizer.tokenize(t))
+alltweets_tokenized.to_csv(tokenized_file,encoding='utf-8')
 
-alltweets.to_csv(tokenized_file,encoding='utf-8')
+# preprocess
+tokenized_and_preprocessed = alltweets_tokenized
+# join list for better processing
+tokenized_and_preprocessed['text_tokenized'] = tokenized_and_preprocessed['text_tokenized'].apply(lambda t: " ".join(t))
+# remove RT clause
+tokenized_and_preprocessed['text_tokenized'].apply(lambda t: re.sub(r'\[RT, .* :,','', t))
+# other "useless" stuff
+tokenized_and_preprocessed['text_tokenized'].apply(lambda t: t.replace('.',''))
+tokenized_and_preprocessed.to_csv(tokenized_and_preprocessed_file,encoding='utf-8')
 
-english_tweets = alltweets[alltweets['lang'] == 'en']
+# just EN
+english_tweets = tokenized_and_preprocessed[tokenized_and_preprocessed['lang'] == 'en']
 english_tweets.to_csv(english_file, encoding = 'utf-8')
 
 
-
-
-
-
-#http://stackoverflow.com/questions/11339955/python-string-encode-decode
-#https://dev.twitter.com/rest/public/timelines
-#https://marcobonzanini.com/2015/03/17/mining-twitter-data-with-python-part-3-term-frequencies/
-#http://stackoverflow.com/questions/5096776/unicode-decodeutf-8-ignore-raising-unicodeencodeerror
-
-#http://www.nltk.org/api/nltk.sentiment.html#module-nltk.sentiment.sentiment_analyzer
-    

@@ -25,7 +25,15 @@ tweets_by_language = pd.groupby(alltweets_tokenized, 'lang').size().sort_values(
 #print(tweets_by_language)
 
 X_train = tweets_english['text_tokenized']
-X_train = X_train.apply(lambda t: t.replace(',','')).apply(lambda t: t.replace('[','')).apply(lambda t: t.replace(']',''))
+# remove RT clause
+X_train = X_train.apply(lambda t: re.sub(r'[RT, .* :,', , t)))
+# remove separator and start/end tokens of nltk tokenizer
+X_train = X_train.apply(lambda t: t.replace(',',''))
+X_train = X_train.apply(lambda t: t.replace('[',''))
+X_train = X_train.apply(lambda t: t.replace(']',''))
+# other "useless" stuff
+
+
 stopwords_nltk = set(stopwords.words("english"))
 relevant_words = set(['not', 'nor', 'no', 'wasn', 'ain', 'aren', 'very', 'only', 'but', 'don', 'isn', 'weren'])
 stopwords_filtered = list(stopwords_nltk.difference(relevant_words))
