@@ -32,33 +32,46 @@ for i in range(1,6):
     topic_model = gl.topic_model.create(word_counts, num_topics=i, num_iterations=200)
     print([x['words'] for x in topic_model.get_topics(output_type='topic_words', num_words=30)])
     for j in range(1,i):
+        plt.figure()
         plt.plot(range(100), topic_model.get_topics(topic_ids=[j], num_words=100)['score'])
         plt.xlabel('Word rank')
         plt.ylabel('Probability')
         plt.title('Probabilities of Top 100 Words in each Topic')
         plt.show()
         
-'''        
-[[':', '.', 'rt', '!', '-', '"', '?', 'oracle', '...', '\xe2\x80\xa6', '(', ')', '/', '&', 'great', 'data', 'good', '#oracle', "'", 'today', 'cloud', 'day', ':)', 'time', '#orclapex', ':-)', '\xe2\x80\x99', 'sql', '2', 'blog']]
-
-[[':', 'rt', '"', '?', '.', '-', '...', '\xe2\x80\xa6', ')', '(', '/', 'oracle', 'data', "'", 'sql', 'blog', 'video', 'cloud', '@sfonplsql', 'database', 'business', 'post', '|', '+', '1', '#oracle', 'big', 'windows', 'read', 'free'],
-['.', '!', '-', '&', 'rt', 'great', 'oracle', 'good', 'today', 'day', ':)', 'time', '#orclapex', ':-)', "it's", "i'm", 'week', '#oracle', '@oracle', 'nice', '2015', "don't", 'session', 'work', '2016', 'join', '\xe2\x80\x99', '2', 'year', 'morning']]
-
-
-[['!', '-', ':', 'rt', '(', ')', '?', '...', 'data', 'great', 'today', '2', 'video', '1', '|', '3', 'week', 'day', '5', 'year', '\xe2\x80\xa6', 'session', 'twitter', 'event', '4', 'free', 'open', 'big', 'happy', '10'],
-[':', 'rt', 'oracle', '\xe2\x80\xa6', '&', '#oracle', 'cloud', '#orclapex', '\xe2\x80\x99', '!', 'blog', '@oracle', '2015', "'", 'business', 'database', '#opn', 'pm', '+', '#cloud', '@', 'live', 'http', 'learn', 'service', 'partner', 'customer', 'area', 'apex', 'join'],
-['.', '"', '?', '...', '/', '!', 'good', ':', 'time', ':)', ':-)', 'sql', "it's", "i'm", "don't", '@sfonplsql', 'nice', 'day', 'work', "'", 'morning', 'make', 'back', ';)', 'read', '#plsql', ';-)', '\xe2\x80\x9c', '$', 'pl']]
+'''
+[
+['!', '?', 'oracle', 'data', 'great', '#oracle', 'cloud', 'good', ':)', 'time', 'today', 'sql', '2', "it's", 'day', 'database', '1', ':-)', 'business', 'blog', "i'm", 'week', '#orclapex', 'big', "don't", '#cloud', '12c', '#bigdata', 'rt', 'check']
+]
 
 
-[[':', 'rt', '.', 'oracle', '\xe2\x80\xa6', '#oracle', 'cloud', '&', '\xe2\x80\x99', '@oracle', '#orclapex', 'business', 'database', 'blog', '#opn', 'join', 'bi', '+', 'live', '#cloud', '\xe2\x80\x9c', '!', '12c', '\xe2\x80\x9d', 'partner', 'apex', 'service', '#oow15', 'learn', '\xe2\x80\x93'],
-[':', 'rt', '...', '(', ')', '?', '&', '2', '!', 'data', 'week', '1', '2015', '2016', '3', 'windows', '5', 'pm', 'twitter', '4', '@', '10', 'area', 'free', 'entered', '%', 'work', '@panicc', '@lepetitbouton87', '@mary871202'],
-['.', '!', 'good', 'great', 'today', 'day', ':)', 'time', ':-)', "it's", 'nice', 'year', 'morning', "i'm", ';-)', 'back', ';)', 'session', 'event', 'open', 'people', 'happy', 'hope', '#orclapex', '?', 'start', 'forward', 'working', 'home', 'fun'],
-[':', '-', '"', 'rt', '?', '/', '\xe2\x80\xa6', "'", 'sql', 'data', 'video', '@sfonplsql', '|', 'big', 'check', "don't", '#plsql', '...', '$', 'pl', 'customer', 'http', 'code', 'performance', '@youtube', 'things', ':/', 'experience', 'world', 'make']]
+[
+['oracle', 'data', '?', '#oracle', 'cloud', 'day', 'database', 'business', 'big', '#cloud', '12c', '#bigdata', '10', 'learn', 'join', '#iamcp', 'windows', '2015', 'free', 'service', '\xe2\x80\x9c', 'bi', 'people', '\xe2\x80\x9d', '2016', 'analytics', '\xe2\x80\x93', 'live', 'partner', '#wpc16'], 
+['!', '?', 'great', 'good', ':)', 'time', 'sql', "it's", ':-)', "i'm", '#orclapex', "don't", 'today', 'rt', 'post', '2', ';-)', '1', 'make', 'nice', 'work', 'year', 'top', ')', 'week', 'find', 'blog', 'check', 'community', 'happy']
+]
 
 
-[['.', '/', 'good', 'day', ':)', 'sql', '...', "it's", ':-)', "i'm", 'time', "don't", '@sfonplsql', 'work', 'morning', 'nice', 'today', ';-)', ';)', 'back', '#plsql', 'pl', 'code', 'hope', 'start', 'working', 'home', '@rmoff', '#fb', 'make'],
-['.', '?', '...', ':', 'data', "'", '\xe2\x80\x99', '2', '+', 'week', 'business', '#opn', '@oracle', '3', 'twitter', 'people', '5', '$', 'partner', 'customer', '4', 'big', '%', '#cloud', 'experience', '@oraclepartners', 'digital', 'security', 'social', 'check'],
-[':', 'rt', 'oracle', '#oracle', 'cloud', '&', '2015', 'database', '2016', 'windows', 'bi', 'pm', '12c', 'learn', 'area', 'service', 'entered', 'today', '@panicc', '@lepetitbouton87', '@mary871202', '\xe2\x80\x93', 'top', 'server', 'live', '@', 'update', '10', 'free', '8'], 
-[':', '-', '"', 'rt', '(', ')', '\xe2\x80\xa6', 'video', 'blog', '?', 'post', '|', '&', 'http', 'data', 'read', '@youtube', ':/', 'management', 'web', 'software', '\xe2\x80\x94', 'interesting', '*', 'full', '1', 'follow', 'article', 'agile', '#'], 
-['!', ':', 'rt', 'great', '.', '\xe2\x80\xa6', '#orclapex', 'year', '&', 'join', '\xe2\x80\x9c', 'open', 'apex', '\xe2\x80\x9d', 'happy', 'session', 'event', 'team', 'conference', 'forward', 'community', '@ukoug', '@pythian', 'book', '#kscope16', 'today', 'time', '#datavault', 'congrats', 'awesome']]
- '''       
+[
+['oracle', '#oracle', 'cloud', 'sql', 'database', 'blog', '12c', 'today', 'check', 'learn', '2015', 'service', 'bi', 'join', '2016', '\xe2\x80\x93', '?', 'live', 'partner', 'free', 'mobile', 'performance', 'support', '|', 'security', 'management', 'data', 'enterprise', 'part', 'apps'],
+['!', '?', 'data', 'great', 'week', 'big', "don't", '#bigdata', 'video', 'day', '"', 'good', '\xe2\x80\x9c', '#cloud', 'business', '\xe2\x80\x9d', 'top', 'time', ')', 'happy', '@oracle', 'twitter', ':)', 'back', 'people', 'today', '>', 'stories', '5', 'partners'],
+['!', '?', '2', "it's", ':-)', '1', "i'm", ':)', 'great', 'rt', '10', '#orclapex', 'good', '#iamcp', '+', 'windows', 'time', ';-)', '#wpc16', '$', 'year', 'post', 'nice', '#', 'code', '3', 'session', 'make', 'event', 'world']
+]
+
+
+[
+['#orclapex', 'video', 'learn', 'join', '"', 'check', '\xe2\x80\x9c', '\xe2\x80\x9d', '2016', 'world', '2', 'http', 'today', 'live', 'open', 'https', '2015', 'time', '@', 'apex', 'conference', ':/', 'rt', 'session', 'talk', '+', 'watch', 'webinar', '2014', 'register'],
+['oracle', 'data', '#oracle', 'cloud', 'database', 'business', '1', 'blog', 'big', '#cloud', '12c', '#bigdata', 'post', 'service', 'bi', 'analytics', '@oracle', 'security', 'management', 'enterprise', 'azure', '\xe2\x80\x93', 'performance', 'services', 'part', 'release', 'server', 'features', 'read', 'integration'],
+['!', '?', 'sql', 'day', '10', 'today', 'make', 'windows', 'time', '5', '$', 'microsoft', 'app', 'rt', 'work', 'code', 'java', '3', 'win', '%', 'year', 'google', 'support', '8', 'developer', 'build', 'years', 'pl', '+', 'nice'],
+['!', '?', 'great', ':)', 'good', ':-)', "i'm", 'week', "it's", '#iamcp', ';-)', "don't", 'top', ')', '#wpc16', 'event', 'happy', 'twitter', 'follow', '*', 'community', '>', 'people', ';)', 'stories', "that's", 'home', 'nice', 'forward', 'hope']
+]
+
+
+[
+['?', 'good', ':)', '!', "it's", ':-)', 'sql', "don't", ';-)', 'work', ')', '*', 'find', ';)', 'nice', "that's", '>', '#plsql', 'interesting', '@franckpachot', 'pl', 'morning', "i'm", "you're", '=', "can't", 'read', 'people', "what's", 'start'],
+['oracle', '#oracle', 'database', '1', 'blog', '12c', '2', 'post', 'service', 'performance', 'support', 'part', 'bi', '3', 'check', '[', 'update', '\xe2\x80\x93', 'release', '?', ']', 'server', 'features', '4', 'application', 'soa', 'developer', 'download', 'released', 'mobile'],
+['cloud', 'business', '#cloud', '#bigdata', 'learn', '#iamcp', 'analytics', 'top', 'partner', '#wpc16', '@oracle', 'management', '|', '2015', 'customer', 'https', 'things', 'make', '2016', 'partners', 'webinar', 'technology', '.', 'experience', '#analytics', 'customers', '#iot', 'tech', '#opn', 'social'],
+['data', '10', '"', 'big', 'windows', 'video', '\xe2\x80\x9c', 'time', '\xe2\x80\x9d', "i'm", '$', '%', 'microsoft', 'free', 'rt', 'app', '+', 'azure', '5', 'apps', 'win', 'home', '8', 'google', 'build', 'years', 'code', '3', 'java', '@youtube'],
+['!', 'great', 'today', 'day', '#orclapex', 'week', 'time', 'session', 'join', 'year', 'twitter', 'event', 'happy', 'talk', 'conference', 'follow', 'open', 'days', 'team', 'forward', '@', 'community', 'presentation', 'rt', 'apex', 'ready', 'live', 'awesome', 'tomorrow', 'back']
+]
+
+'''
