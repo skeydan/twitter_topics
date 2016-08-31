@@ -4,6 +4,7 @@ from ast import literal_eval
 import config
 import glob
 import fileinput
+import re
 from nltk.tokenize import TweetTokenizer
 
 
@@ -12,14 +13,12 @@ tokenized_file = config.data_dir + '/tweets_tokenized.csv'
 tokenized_and_preprocessed_file = config.data_dir + '/tweets_tokenized_and_preprocessed.csv'
 english_file = 'data/tweets_english.csv'
 
-'''
 user_files = glob.glob('data/Trivadis_*_*.csv')
 with open(alltweets_file, 'w') as fout:
     f = fileinput.input(files=(user_files))
     for line in f:
         fout.write(line)
     f.close()
-'''
 
 alltweets = pd.read_csv(alltweets_file, header=None, index_col=False,
                     names=['id_str', 'user_id', 'created_at', 'lang', 'text', 'favorite_count', 'entities',
@@ -42,9 +41,28 @@ tokenized_and_preprocessed = alltweets_tokenized
 # join list for better processing
 tokenized_and_preprocessed['text_tokenized'] = tokenized_and_preprocessed['text_tokenized'].apply(lambda t: " ".join(t))
 # remove RT clause
-tokenized_and_preprocessed['text_tokenized'].apply(lambda t: re.sub(r'\[RT, .* :,','', t))
-# other "useless" stuff
-tokenized_and_preprocessed['text_tokenized'].apply(lambda t: t.replace('.',''))
+tokenized_and_preprocessed['text_tokenized'] = tokenized_and_preprocessed['text_tokenized'].apply(lambda t: re.sub(r'^RT @.*? :','', t))  
+
+# …
+tokenized_and_preprocessed['text_tokenized'] = tokenized_and_preprocessed['text_tokenized'].apply(lambda t: re.sub(r'…', ' ', t))
+# ...
+tokenized_and_preprocessed['text_tokenized'] = tokenized_and_preprocessed['text_tokenized'].apply(lambda t:re.sub(r'\.\.\.', ' ', t))
+# . one or more
+tokenized_and_preprocessed['text_tokenized'] = tokenized_and_preprocessed['text_tokenized'].apply(lambda t: re.sub(r' \.+ ', ' ',t)) 
+# . at the end
+tokenized_and_preprocessed['text_tokenized'] = tokenized_and_preprocessed['text_tokenized'].apply(lambda t: re.sub(r' \.+$', ' ',t)) 
+
+# other single non-chars
+# test:
+# 
+#t='a :-) : a , a . a - a :) :( a ( a \ a / a " a'
+#re.sub(r' [,.\-:()\/"] ', ' ',t)
+tokenized_and_preprocessed['text_tokenized'] = tokenized_and_preprocessed['text_tokenized'].apply(lambda t: re.sub(r' [,.\-:()&\'’\/"] ', ' ',t))
+# second run for overlapping
+tokenized_and_preprocessed['text_tokenized'] = tokenized_and_preprocessed['text_tokenized'].apply(lambda t: re.sub(r' [,.\-:()&\'’\/"] ', ' ',t)) 
+
+
+
 tokenized_and_preprocessed.to_csv(tokenized_and_preprocessed_file,encoding='utf-8')
 
 # just EN

@@ -6,10 +6,10 @@ import matplotlib.pyplot as plt
 import config
 
 
-tokenized_file = config.data_dir  + '/' + 'tweets_tokenized.csv'
+tokenized_and_preprocessed_file = config.data_dir + '/tweets_tokenized_and_preprocessed.csv'
 english_file = config.data_dir  + '/' + 'tweets_english.csv'
 
-alltweets_tokenized = pd.read_csv(tokenized_file, encoding='utf-8',
+alltweets = pd.read_csv(tokenized_and_preprocessed_file, encoding='utf-8',
                                   usecols = ['id_str', 'user_id', 'created_at', 'lang', 'text', 'favorite_count', 'entities',
                                              'in_reply_to_screen_name', 'in_reply_to_status_id_str', 'in_reply_to_user_id',
                                              'retweet_count', 'quoted_status_id_str', 'text_tokenized'])
@@ -18,11 +18,10 @@ tweets_english = pd.read_csv(english_file, encoding='utf-8',
                                          'in_reply_to_screen_name', 'in_reply_to_status_id_str', 'in_reply_to_user_id',
                                          'retweet_count', 'quoted_status_id_str', 'text_tokenized'])
 
-tweets_by_language = pd.groupby(alltweets_tokenized, 'lang').size().sort_values(ascending = False)
+tweets_by_language = pd.groupby(alltweets, 'lang').size().sort_values(ascending = False)
 #print(tweets_by_language)
 
 X_train = tweets_english['text_tokenized']
-X_train = X_train.apply(lambda t: t.replace(',','')).apply(lambda t: t.replace('[','')).apply(lambda t: t.replace(']',''))
 
 X_train_sarray = SFrame(X_train)['X1']
 
