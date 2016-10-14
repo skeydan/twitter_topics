@@ -36,11 +36,6 @@ class UserIdListener(StreamListener):
 
     def on_error(self, status):
         print(status)
-        if status_code == 420:
-            #returning False in on_data disconnects the stream
-            return False
-        
-    
 
 if __name__ == '__main__':
     l = UserIdListener('trivadis')
