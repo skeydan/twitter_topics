@@ -14,9 +14,10 @@ auth = OAuthHandler(config.consumer_key, config.consumer_secret)
 auth.set_access_token(config.access_token, config.access_secret)
 api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True, compression=True)
 
-c = tweepy.Cursor(api.followers_ids, id = config.target_user)
+target = sys.argv[1]
+c = tweepy.Cursor(api.followers_ids, id = target)
 ids = []
-filename = 'data/follower_ids_' + config.target_user + '.csv'
+filename = 'data/follower_ids_' + target + '.csv'
 with io.open(filename, 'w', encoding='utf-8') as ids_file: 
     writer = csv.writer(ids_file)
     for page in c.pages():
@@ -25,7 +26,7 @@ with io.open(filename, 'w', encoding='utf-8') as ids_file:
     writer.writerow(ids)
     
 users = []
-filename = 'data/followers_' + config.target_user + '.csv'
+filename = 'data/followers_' + target + '.csv'
 with io.open(filename, 'a', encoding='utf-8') as users_file:
     writer = csv.writer(users_file)
     for i, user_id in enumerate(ids):
