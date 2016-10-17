@@ -21,6 +21,7 @@ class UserIdListener(StreamListener):
     
     def on_data(self, data):
         try:
+            tweet = data
             user_id = json.loads(data)['user']['id_str']            
             print(user_id)
             curdate = datetime.datetime.now().strftime("%Y-%m-%d")
