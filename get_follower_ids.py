@@ -16,13 +16,13 @@ auth = OAuthHandler(config.consumer_key, config.consumer_secret)
 auth.set_access_token(config.access_token, config.access_secret)
 api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True, compression=True)
 
-c = tweepy.Cursor(api.followers_ids, id = config.target_user)
+c = tweepy.Cursor(api.followers_ids, id = target)
 ids = []
-outdir = "{}/data/twitter/followers/{}".format(config.dir_prefix, config.target_user)
+outdir = "{}/data/twitter/followers/{}".format(config.dir_prefix, target)
 curdate = datetime.datetime.now().strftime("%Y-%m-%d")
 daily_dir = '/'.join([outdir, curdate])
 if not os.path.exists(daily_dir): os.makedirs(daily_dir)
-filename = '/'.join([daily_dir, "follower_ids_" + config.target_user + ".csv"]) 
+filename = '/'.join([daily_dir, "follower_ids_" + target + ".csv"]) 
 
 with io.open(filename, 'w', encoding='utf-8') as ids_file: 
     writer = csv.writer(ids_file)
