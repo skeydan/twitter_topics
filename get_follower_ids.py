@@ -16,6 +16,8 @@ auth = OAuthHandler(config.consumer_key, config.consumer_secret)
 auth.set_access_token(config.access_token, config.access_secret)
 api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True, compression=True)
 
+target = sys.argv[1]
+
 c = tweepy.Cursor(api.followers_ids, id = target)
 ids = []
 outdir = "{}/data/twitter/followers/{}".format(config.dir_prefix, target)
