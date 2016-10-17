@@ -50,5 +50,5 @@ if __name__ == '__main__':
 
     stream = Stream(auth, l)
     # https://dev.twitter.com/streaming/overview/request-parameters#follow
-    #stream.filter(follow = l.user_ids)
-    stream.filter(track = 'machinelearning')
+    stream.filter(follow = l.user_ids)
+    #stream.filter(track = 'machinelearning')
