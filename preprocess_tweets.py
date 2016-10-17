@@ -10,8 +10,9 @@ from nltk.tokenize import TweetTokenizer
 
 pd.set_option('display.max_colwidth', 200)
 
-target_month = sys.argv[1]
-source_dir = "{}/data/twitter/tweets/{}".format(config.dir_prefix, config.target_user)
+target = sys.argv[1]
+target_month = sys.argv[2]
+source_dir = "{}/data/twitter/tweets/{}".format(config.dir_prefix, target)
 
 alltweets_file = '/'.join([source_dir, target_month + '_raw.csv'])
 tokenized_file = '/'.join([source_dir, target_month  + '_tokenized.csv'])
