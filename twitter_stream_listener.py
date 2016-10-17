@@ -21,20 +21,19 @@ class UserIdListener(StreamListener):
     
     def on_data(self, data):
         try:
-            tweet = data
-            user_id = json.loads(data)['user']['id_str']            
+            tweet = json.loads(data)
+            user_id = tweet['user']['id_str']
             print(user_id)
             curdate = datetime.datetime.now().strftime("%Y-%m-%d")
             daily_dir = '/'.join([self.outdir, curdate])
             if not os.path.exists(daily_dir): os.makedirs(daily_dir)
-            user_file = '/'.join([daily_dir, "user_" + user_id + "_" + curdate]) 
+            user_file = '/'.join([daily_dir, "user_" + user_id + "_" + curdate])
             with open(user_file, 'a') as f:
                 writer = csv.writer(f)
                 writer.writerow(
-                        [tweet.id_str, tweet.user.id, tweet.created_at, tweet.lang, tweet.text, tweet.retweeted, tweet.favorite_count, tweet.entities,
-                        tweet.in_reply_to_screen_name, tweet.in_reply_to_status_id_str, tweet.in_reply_to_user_id, 
-                        tweet.quoted_status_id_str if hasattr(tweet, 'tweet.quoted_status_id_str') else None,
-                        tweet.retweet_count])
+                        [tweet["id_str"], tweet["user"]["id"], tweet["created_at"], tweet["lang"], tweet["text"], tweet["retweeted"], tweet["favorite_count"], tweet["entities"],
+                        tweet["in_reply_to_screen_name"], tweet["in_reply_to_status_id_str"], tweet["in_reply_to_user_id"],
+                        tweet["quoted_status_id_str"] if hasattr(tweet, "quoted_status_id_str") else None, tweet["retweet_count"]])
                 return True
         except BaseException as e:
             print("Error on_data: %s" % str(e))
