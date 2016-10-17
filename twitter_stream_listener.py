@@ -10,6 +10,7 @@ import json
 import datetime
 import os
 import csv
+import sys
 
 class UserIdListener(StreamListener):
     def __init__(self, target):      
@@ -44,7 +45,8 @@ class UserIdListener(StreamListener):
         print(status)
 
 if __name__ == '__main__':
-    l = UserIdListener('trivadis')
+    target = sys.argv[1]
+    l = UserIdListener(target)
     auth = OAuthHandler(config.consumer_key, config.consumer_secret)
     auth.set_access_token(config.access_token, config.access_secret)
 
