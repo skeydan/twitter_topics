@@ -51,7 +51,7 @@ alltweets_tokenized.to_csv(tokenized_file,encoding='utf-8')
 #test_tweet_tokenized = tokenizer.tokenize(test_tweet)
 #[i for i in test_tweet_tokenized if i not in remove_list]
 
-remove_list = ['?', '!', '–', '.', '*', '...', '"', '\'', '\\', '-', ':', '(', ')', '&', '’', '/', '[', ']', '…', '>', '<', '->', '<--', '+']
+remove_list = ['?', '!', '–', '.', '*', '...', '"', '\'', '\\', '-', ':', '(', ')', '&', '’', '/', '[', ']', '…', '>', '<', '->', '<--', '+', ',']
 remove_list.append('RT')
 remove_list.append('via')
 tokenized_and_preprocessed = alltweets_tokenized
