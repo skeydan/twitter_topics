@@ -3,6 +3,7 @@ import numpy as np
 
 import config
 import sys
+import re
 from ast import literal_eval
 from nltk.corpus import stopwords
 from collections import defaultdict
@@ -36,7 +37,16 @@ tweets_english = pd.read_csv(english_file, encoding='utf-8',
 #tweets_by_language = pd.groupby(alltweets, 'lang').size().sort_values(ascending = False)
 #print(tweets_by_language)
 
-X_train = tweets_english['text_processed'].apply(lambda x: ' '.join(x))
+def remove_hash(wordlist):
+    return(list(map(lambda x: re.sub(r'^#','',x), wordlist)))
+
+def remove_at(wordlist):
+    return(list(map(lambda x: re.sub(r'^@','',x), wordlist)))
+    
+tweets_english['text_wo_#'] = tweets_english['text_processed'].apply(lambda x: remove_hash(x))
+tweets_english['text_wo_#@'] = tweets_english['text_wo_#'].apply(lambda x: remove_at(x))
+
+X_train = tweets_english['text_wo_#@'].apply(lambda x: ' '.join(x))
 
 stopwords_nltk = set(stopwords.words("english"))
 relevant_words = set(['not', 'nor', 'no', 'wasn', 'ain', 'aren', 'very', 'only', 'but', 'don', 'isn', 'weren'])
@@ -87,7 +97,7 @@ print( '''
 ******************************************************************************/
 ''')
 
-vectorizer = CountVectorizer(analyzer = "word", tokenizer = None, preprocessor = None, token_pattern = '\S+',
+vectorizer = CountVectorizer(analyzer = "word", tokenizer = str.split, 
                                     stop_words = stopwords_filtered, max_features = 100000, ngram_range = (1,1))
 words_matrix = vectorizer.fit_transform(X_train)
 
@@ -113,9 +123,10 @@ print( '''
 *                     LDA 2-grams                                             *
 ******************************************************************************/
 ''')
-'''
-vectorizer = CountVectorizer(analyzer = "word", tokenizer = None, preprocessor = None, token_pattern = '\S+',
+
+vectorizer = CountVectorizer(analyzer = "word", tokenizer = str.split, 
                                     stop_words = stopwords_filtered, max_features = 100000, ngram_range = (1,2))
+
 words_matrix = vectorizer.fit_transform(X_train)
 
 def print_top_words(model, feature_names, n_top_words):
@@ -133,15 +144,15 @@ for n_topics in range(1,6):
     print("\nTopics in LDA model:")
     feature_names = vectorizer.get_feature_names()
     print_top_words(lda, feature_names, n_top_words)
-'''    
+  
 
 print( '''
 /******************************************************************************
 *                     LDA 3-grams                                             *
 ******************************************************************************/
 ''')
-'''
-vectorizer = CountVectorizer(analyzer = "word", tokenizer = None, preprocessor = None, token_pattern = '\S+',
+
+vectorizer = CountVectorizer(analyzer = "word", tokenizer = str.split, 
                                     stop_words = stopwords_filtered, max_features = 100000, ngram_range = (1,3))
 words_matrix = vectorizer.fit_transform(X_train)
 
@@ -160,7 +171,7 @@ for n_topics in range(1,6):
     print("\nTopics in LDA model:")
     feature_names = vectorizer.get_feature_names()
     print_top_words(lda, feature_names, n_top_words)
-'''    
+   
 
 
 print( '''
