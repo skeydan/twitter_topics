@@ -180,54 +180,21 @@ print( '''
 ******************************************************************************/
 ''')
 
-def get_co_occurrences(record):
-    wordlist = record.split()
-    for i in range(len(wordlist) - 1):
-        for j in range(i+1, len(wordlist)):    
-            w1, w2 = sorted([wordlist[i], wordlist[j]]) 
-            if w1 != w2:
-                co_occurrences[w1][w2] += 1
-                co_occurrences[w2][w1] += 1
-                
+co_occurrence_matrix = words_matrix.T * words_matrix
+co_occurrence_matrix.setdiag(0) 
+array = co_occurrence_matrix.toarray()
+co_occurrences = pd.DataFrame(array)
+co_occurrences.shape
 
-# co_occurrences, by word, ordered alphabetically
-# each word appears as key
-co_occurrences = defaultdict(lambda : defaultdict(int))
-X_train[:100].apply(get_co_occurrences) 
-        
-co_occurrences_df = pd.DataFrame.from_dict(co_occurrences)   
-print(co_occurrences_df[:10])
+vocab = vectorizer.get_feature_names()
+co_occurrences['word'] = vocab
+co_occurrences = co_occurrences.set_index('word')
+co_occurrences.head()
 
-# for every word, most frequent co-occurring words
-co_occurrences_by_freq = {word: sorted(co_occurrences[word].items(), key = lambda k_v: k_v[1], reverse=True) for word in co_occurrences}
-'''
-print('co_occurrences ordered by frequency for each word:')
-i=0
-for word in co_occurrences_by_freq:
-    i = i+1
-    if i > 9: break
-    print (word)
-    for tup in co_occurrences_by_freq[word]: print(tup[0] + ': ' + str(tup[1]))
-'''
+co_occurrences.columns = vocab
+co_occurrences.head()
 
-# co_occurrences sorted by highest value per word
-co_occurrences_by_highest_freq = sorted(co_occurrences_by_freq.items(), key = lambda k_v: k_v[1][0][1], reverse=True)
-'''
-print('co_occurrences sorted by highest value per word:')
-print(co_occurrences_by_highest_freq[:10])
-'''
 
-topics = ['oracle', 'windows', 'cloud', 'sql', 'orclapex']
-topics_hashtags = map(lambda s: '#'+s, topics)
-topics_with_hashtags = topics + topics_hashtags
-     
-people = ['@sfonplsql']    
-
-vendors = ['oracle']
-vendors_at = map(lambda s: '@'+s, vendors)
-vendors_with_at = vendors + vendors_at
-     
-sentiment_words = ['great', 'good', 'like', 'thanks']
 
 
 
