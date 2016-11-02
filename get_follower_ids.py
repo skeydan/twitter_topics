@@ -10,21 +10,36 @@ import time
 import csv
 import datetime
 import os
+import argparse
+import access
 
+parser = argparse.ArgumentParser()
+parser.add_argument("app", help="application to use")
+parser.add_argument("target", help="storage directory")
+args = parser.parse_args()
+print('App: {}    Target: {}  '.format(args.app, args.target))
 
-auth = OAuthHandler(config.consumer_key, config.consumer_secret)
-auth.set_access_token(config.access_token, config.access_secret)
+def get_auth_tokens(application):
+    tokens =  {
+        "tweetgetter777": [access.consumer_key_1, access.consumer_secret_1, access.access_token_1, access.access_secret_1],
+        "tweetgetter778": [access.consumer_key_2, access.consumer_secret_2, access.access_token_2, access.access_secret_2],
+        "tweetgetter779": [access.consumer_key_3, access.consumer_secret_3, access.access_token_3, access.access_secret_3],
+        "tweetgetter780": [access.consumer_key_4, access.consumer_secret_4, access.access_token_4, access.access_secret_4]
+        }
+    return tokens.get(application, "missing")
+
+(consumer_key, consumer_secret, access_token, access_secret) = get_auth_tokens(args.app)
+auth = OAuthHandler(consumer_key, consumer_secret)
+auth.set_access_token(access_token, access_secret)
 api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True, compression=True)
 
-target = sys.argv[1]
-
-c = tweepy.Cursor(api.followers_ids, id = target)
+c = tweepy.Cursor(api.followers_ids, id = args.target)
 ids = []
-outdir = "{}/data/twitter/followers/{}".format(config.dir_prefix, target)
+outdir = "{}/data/twitter/followers/{}".format(config.dir_prefix, args.target)
 curdate = datetime.datetime.now().strftime("%Y-%m-%d")
 daily_dir = '/'.join([outdir, curdate])
 if not os.path.exists(daily_dir): os.makedirs(daily_dir)
-filename = '/'.join([daily_dir, "follower_ids_" + target + ".csv"]) 
+filename = '/'.join([daily_dir, "follower_ids_" + args.target + ".csv"]) 
 
 with io.open(filename, 'w', encoding='utf-8') as ids_file: 
     writer = csv.writer(ids_file)
