@@ -60,7 +60,9 @@ def get_auth_tokens(application):
         "tweetgetter778": [access.consumer_key_2, access.consumer_secret_2, access.access_token_2, access.access_secret_2],
         "tweetgetter779": [access.consumer_key_3, access.consumer_secret_3, access.access_token_3, access.access_secret_3],
         "tweetgetter780": [access.consumer_key_4, access.consumer_secret_4, access.access_token_4, access.access_secret_4],
-        "tweetgetter781": [access.consumer_key_5, access.consumer_secret_5, access.access_token_5, access.access_secret_5]
+        "tweetgetter781": [access.consumer_key_5, access.consumer_secret_5, access.access_token_5, access.access_secret_5],
+        "tweetgetter782": [access.consumer_key_6, access.consumer_secret_6, access.access_token_6, access.access_secret_6],
+        "tweetgetter783": [access.consumer_key_7, access.consumer_secret_7, access.access_token_7, access.access_secret_7]
         }
     return tokens.get(application, "missing")
 
