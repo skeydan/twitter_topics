@@ -46,12 +46,13 @@ alltweets_tokenized['text_tokenized'] = alltweets_tokenized['text'].apply(lambda
 alltweets_tokenized.to_csv(tokenized_file,encoding='utf-8')
 
 # preprocess
-#test_tweet = 'This is a cooool. #dummysmiley: :-) :-P <3 and some arrows < > -> <-- and what? why! where& (yes) [no] minus- plus+ \word /word2 ;-) :-( :-((( @zkajdan'
-#remove_list = ['?', '!', '.', '\\', '-', ':', '(', ')', '&', '’', '/', '[', ']', '…', '>', '<', '->', '<--', '+']
+
+#test_tweet = 'This is % a $ cooool. #dummysmiley: :-) :-P <3 and --> some .. arrows < > -> <-- and what? why! where& (yes) [no] minus- plus+ \word /word2 ;-) :-( :-((( @zkajdan'
+#remove_list = ['?', '!', '.', '\\', '-', ':', '(', ')', '&', '’', '/', '[', ']', '…', '>', '<', '->', '<--', '+', '$', '%','-->','..']
 #test_tweet_tokenized = tokenizer.tokenize(test_tweet)
 #[i for i in test_tweet_tokenized if i not in remove_list]
 
-remove_list = ['?', '!', '–', '.', '*', '...', '"', '\'', '\\', '-', ':', '(', ')', '&', '’', '/', '[', ']', '…', '>', '<', '->', '<--', '+', ',']
+remove_list = ['?', '!', '–', '.', '*', '...', '"', '\'', '\\', '-', ':', '(', ')', '&', '’', '/', '[', ']', '…', '>', '<', '->', '<--', '+', ',','$', '%','-->','..']
 remove_list.append('RT')
 remove_list.append('via')
 tokenized_and_preprocessed = alltweets_tokenized
